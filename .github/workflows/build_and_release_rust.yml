@@ -62,15 +62,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential libssl-dev pkg-config clang lld llvm
 
-      - name: Install Arm GNU toolchain
-        uses: carlosperate/arm-none-eabi-gcc-action@v1
-        with:
-          release: 14.2.Rel1
+      # - name: Install Arm GNU toolchain
+      #   uses: carlosperate/arm-none-eabi-gcc-action@v1
+      #   with:
+      #     release: 14.2.Rel1
 
-      - name: Install Arm64 GNU toolchain
-        uses: lawkai-vivo/aarch64-none-elf-gcc-action@v1
-        with:
-          release: 14.2.Rel1
+      # - name: Install Arm64 GNU toolchain
+      #   uses: lawkai-vivo/aarch64-none-elf-gcc-action@v1
+      #   with:
+      #     release: 14.2.Rel1
 
       - name: Build Rust toolchain
         env:
@@ -83,18 +83,14 @@ jobs:
           echo "Installing Rust toolchain to ${DESTDIR} ..."
           ./x.py install -i --stage 1 compiler/rustc
           ./x.py install -i --stage 1 library/std --target x86_64-unknown-linux-gnu
-          ./x.py install -i --stage 1 library/std --target thumbv7m-vivo-blueos-newlibeabi
-          ./x.py install -i --stage 1 library/std --target thumbv8m.main-vivo-blueos-newlibeabihf
-          ./x.py install -i --stage 1 library/std --target aarch64-vivo-blueos-newlib
-          ./x.py install -i --stage 1 library/std --target riscv64-vivo-blueos
-          ./x.py install -i --stage 1 library/std --target riscv32-vivo-blueos
-          ./x.py install -i --stage 1 library/std --target riscv32imc-vivo-blueos
           ./x.py install -i --stage 0 rustfmt
           ./x.py install -i --stage 0 rust-analyzer
           ./x.py install -i --stage 0 clippy
           ./x.py install -i --stage 0 llvm-tools
           ./x.py install -i --stage 0 cargo
           ./x.py install -i --stage 0 miri
+          ./x.py test --stage 1 miri || true
+          cp -r build/x86_64-unknown-linux-gnu/miri-sysroot ${DESTDIR}/usr/local/lib/rustlib/x86_64-unknown-linux-gnu/
 
       - name: Create tarball
         run: |
@@ -104,7 +100,7 @@ jobs:
         uses: octokit/request-action@v2.x
         id: get_release_page
         with:
-          route: GET /repos/vivoblueos/toolchain/releases/tags/${{ github.event.inputs.tag }}
+          route: GET /repos/rollinggulf/toolchain/releases/tags/${{ github.event.inputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
