@@ -20,7 +20,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-22.04]
+        # os: [ubuntu-latest, ubuntu-22.04]
+        os: [ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -100,7 +101,7 @@ jobs:
         uses: octokit/request-action@v2.x
         id: get_release_page
         with:
-          route: GET /repos/rollinggulf/toolchain/releases/tags/${{ github.event.inputs.tag }}
+          route: GET /repos/rollinggulf1999/toolchain/releases/tags/${{ github.event.inputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
