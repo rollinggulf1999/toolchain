@@ -106,7 +106,7 @@ jobs:
         uses: octokit/request-action@v2.x
         id: get_release_page
         with:
-          route: GET /repos/vivoblueos/toolchain/releases/tags/${{ github.event.inputs.tag }}
+          route: GET /repos/rollinggulf1999/toolchain/releases/tags/${{ github.event.inputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
