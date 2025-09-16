@@ -83,15 +83,19 @@ jobs:
           echo "Installing Rust toolchain to ${DESTDIR} ..."
           ./x.py install -i --stage 1 compiler/rustc
           ./x.py install -i --stage 1 library/std --target x86_64-unknown-linux-gnu
+          ./x.py install -i --stage 1 library/std --target thumbv7m-vivo-blueos-newlibeabi
+          ./x.py install -i --stage 1 library/std --target thumbv8m.main-vivo-blueos-newlibeabihf
+          ./x.py install -i --stage 1 library/std --target aarch64-vivo-blueos-newlib
+          ./x.py install -i --stage 1 library/std --target riscv64-vivo-blueos
+          ./x.py install -i --stage 1 library/std --target riscv32-vivo-blueos
+          ./x.py install -i --stage 1 library/std --target riscv32imc-vivo-blueos
+          ./x.py install -i --stage 0 rustfmt
+          ./x.py install -i --stage 0 rust-analyzer
+          ./x.py install -i --stage 0 clippy
+          ./x.py install -i --stage 0 llvm-tools
           ./x.py install -i --stage 0 cargo
           ./x.py install -i --stage 0 miri
-          which cargo
-          which cargo-miri
-          export PATH=${DESTDIR}/usr/local/bin:$PATH
-          which cargo
-          which cargo-miri
-          MIRI_LIB_SRC=library MIRI_SYSROOT=build/x86_64-unknown-linux-gnu/miri-sysroot cargo miri setup 
-          cp -r build/x86_64-unknown-linux-gnu/miri-sysroot ${DESTDIR}/usr/local/lib/rustlib/x86_64-unknown-linux-gnu/
+          PATH=${DESTDIR}/usr/local/bin:$PATH MIRI_LIB_SRC=library MIRI_SYSROOT=${DESTDIR}/usr/local/lib/rustlib/x86_64-unknown-linux-gnu/miri-sysroot cargo miri setup 
 
       - name: Create tarball
         run: |
